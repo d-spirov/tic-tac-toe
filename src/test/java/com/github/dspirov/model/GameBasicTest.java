@@ -4,21 +4,29 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import static com.github.dspirov.model.Seed.O;
 import static com.github.dspirov.model.Seed.X;
 import static com.github.dspirov.model.State.PLAYING;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 /**
+ * Basic logic of the game tests. Mostly about initialization.
+ *
  * Created by dspirov on 30/07/16.
  */
-public class GameTest {
+public class GameBasicTest {
 
     private Game game;
 
     @BeforeMethod
     public void setUp() throws Exception {
-        Board board = new Board();
-        this.game = new Game(board);
+        this.game = new Game("Player1", "Player2");
+    }
+
+    @Test
+    public void testPlayers() {
+        Assert.assertEquals(game.getPlayerName(X), "Player1");
+        Assert.assertEquals(game.getPlayerName(O), "Player2");
     }
 
     @Test
@@ -37,5 +45,13 @@ public class GameTest {
     public void testGetCurrentPlayer() throws Exception {
         game.initGame();
         assertEquals(game.getCurrentPlayer(), X);
+    }
+
+    @Test
+    public void testSwitchPlayers() throws Exception {
+        game.initGame();
+        assertEquals(game.getCurrentPlayer(), X);
+        game.moveCurrentPlayer(1, 1);
+        assertEquals(game.getCurrentPlayer(), O);
     }
 }

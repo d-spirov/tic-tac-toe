@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
+ * Main frame of the application.
+ *
  * Created by dspirov on 30/07/16.
  */
 public class TicTacToeFrame extends JFrame {
@@ -16,8 +18,7 @@ public class TicTacToeFrame extends JFrame {
     private JLabel statusBar;
 
     public TicTacToeFrame() throws HeadlessException {
-        Board board = new Board();
-        this.game = new Game(board);
+        this.game = new Game("Player1", "Player2");
 
         statusBar = new JLabel("  ");
         statusBar.setFont(new Font(Font.DIALOG_INPUT, Font.BOLD, 15));

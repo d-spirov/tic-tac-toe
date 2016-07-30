@@ -5,9 +5,19 @@ package com.github.dspirov.model;
  */
 public enum State {
 
-    PLAYING,
-    X_WON,
-    O_WON,
-    DRAW;
+    PLAYING(""),
+    X_WON("X won"),
+    O_WON("Y won"),
+    DRAW("Draw");
+
+    private String message;
+
+    private State(String message) {
+        this.message = message;
+    }
+
+    public String message() {
+        return message;
+    }
 
 }

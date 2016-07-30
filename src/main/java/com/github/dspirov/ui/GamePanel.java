@@ -24,12 +24,13 @@ import static com.github.dspirov.model.State.X_WON;
 class GamePanel extends JPanel {
 
     public static final int CELL_SIZE = 100;
+
     private static final int CELL_PADDING = CELL_SIZE / 5;
     private static final int SYMBOL_SIZE = CELL_SIZE - CELL_PADDING * 2;
-    private final int CANVAS_WIDTH = CELL_SIZE * COLUMNS_COUNT;
-    private final int CANVAS_HEIGHT = CELL_SIZE * ROWS_COUNT;
-    private final int GRID_WIDTH = 8;
-    private final int SYMBOL_STRIKE_WIDTH = 8;
+    private static final int CANVAS_WIDTH = CELL_SIZE * COLUMNS_COUNT;
+    private static final int CANVAS_HEIGHT = CELL_SIZE * ROWS_COUNT;
+    private static final int GRID_WIDTH = 8;
+    private static final int SYMBOL_STRIKE_WIDTH = 8;
     private Game game;
     private JLabel statusBar;
 
@@ -37,6 +38,7 @@ class GamePanel extends JPanel {
         this.game = game;
         this.statusBar = statusBar;
         setPreferredSize(new Dimension(CELL_SIZE * COLUMNS_COUNT, CELL_SIZE * ROWS_COUNT));
+        addMouseListener();
     }
 
     @Override
@@ -45,13 +47,17 @@ class GamePanel extends JPanel {
         setBackground(Color.GRAY);
         drawGrid(g);
         drawCells(g);
-        addMouseListener();
     }
 
     void addMouseListener() {
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(game.getCurrentState() != PLAYING) {
+                    game.initGame();
+                    repaint();
+                    return;
+                }
                 int x = e.getX();
                 int y = e.getY();
                 int rowSelected = y / CELL_SIZE;
@@ -64,10 +70,9 @@ class GamePanel extends JPanel {
                         game.moveCurrentPlayer(rowSelected, colSelected);
                     }
                 } else {
-                    // game over
-                    game.initGame(); // restart the game
+                    statusBar.setText("Game is over, finished in " + game.getMoves() + " moves, "
+                            + game.getCurrentState());
                 }
-                // Refresh the drawing canvas
                 repaint();
                 updateStatusBar();
             }
@@ -114,19 +119,19 @@ class GamePanel extends JPanel {
         if (currentState == PLAYING) {
             statusBar.setForeground(Color.BLACK);
             if (game.getCurrentPlayer() == Seed.X) {
-                statusBar.setText("X's Turn");
+                statusBar.setText(game.getPlayerName(Seed.X) + "'s Turn");
             } else {
-                statusBar.setText("O's Turn");
+                statusBar.setText(game.getPlayerName(Seed.O) + "'s Turn");
             }
         } else if (currentState == DRAW) {
             statusBar.setForeground(Color.RED);
             statusBar.setText("It's a Draw! Click to play again.");
         } else if (currentState == X_WON) {
             statusBar.setForeground(Color.RED);
-            statusBar.setText("'X' Won! Click to play again.");
+            statusBar.setText(game.getPlayerName(Seed.X) + " Won! Click to play again.");
         } else if (currentState == O_WON) {
             statusBar.setForeground(Color.RED);
-            statusBar.setText("'O' Won! Click to play again.");
+            statusBar.setText(game.getPlayerName(Seed.O) + " Won! Click to play again.");
         }
 
     }

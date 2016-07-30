@@ -1,5 +1,8 @@
 package com.github.dspirov.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.github.dspirov.model.Board.COLUMNS_COUNT;
 import static com.github.dspirov.model.Board.ROWS_COUNT;
 
@@ -13,13 +16,23 @@ public class Game {
     private Seed currentPlayer;
     private Board board;
     private State currentState;
+    private int moves;
+    private Map<Seed, String> players;
 
-    public Game(Board board) {
-        this.board = board;
+    public Game(String player1, String player2) {
+        this.board = new Board();
+        players = new HashMap<>();
+        players.put(Seed.X, player1);
+        players.put(Seed.O, player2);
+    }
+
+    public String getPlayerName(Seed seed) {
+        return players.get(seed);
     }
 
     /**
-     * Initializes the game.
+     * Initializes the game. Also it restarts the game.
+     *
      * - X is always first
      * - sets the game status to PLAYING
      */
@@ -27,6 +40,7 @@ public class Game {
         this.board.init();
         this.currentPlayer = Seed.X;
         this.currentState = State.PLAYING;
+        this.moves = 0;
     }
 
     public State getCurrentState() {
@@ -42,9 +56,17 @@ public class Game {
     }
 
     public void moveCurrentPlayer(int row, int col) {
+        if(currentState != State.PLAYING) {
+            throw new IllegalStateException("Game is finished, cannot move!");
+        }
+        moves++;
         board.move(currentPlayer, row, col);
         updateGameState(currentPlayer, row, col);
         switchPlayers();
+    }
+
+    public int getMoves() {
+        return moves;
     }
 
     private void switchPlayers() {
@@ -52,13 +74,12 @@ public class Game {
     }
 
     private void updateGameState(Seed seed, int row, int col) {
-        if (hasWon(seed, row, col)) {  // check for win
+        if (hasWon(seed, row, col)) {
             currentState = (seed == Seed.X) ? State.X_WON : State.O_WON;
-        } else if (isDraw()) {  // check for draw
+        } else if (isDraw()) {
             currentState = State.DRAW;
         }
     }
-
 
     private boolean isDraw() {
         for (int row = 0; row < ROWS_COUNT; ++row) {

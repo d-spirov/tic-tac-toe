@@ -1,6 +1,8 @@
 package com.github.dspirov.model;
 
 /**
+ * Represents board for the game.
+ *
  * Created by dspirov on 30/07/16.
  */
 public class Board {
@@ -10,7 +12,7 @@ public class Board {
 
     private Cell[][] cells;
 
-    public Board() {
+    Board() {
         this.cells = new Cell[ROWS_COUNT][COLUMNS_COUNT];
         for (int i = 0; i < ROWS_COUNT; i++) {
             for (int j = 0; j < COLUMNS_COUNT; j++) {
