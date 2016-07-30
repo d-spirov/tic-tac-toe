@@ -4,6 +4,8 @@ import static com.github.dspirov.model.Board.COLUMNS_COUNT;
 import static com.github.dspirov.model.Board.ROWS_COUNT;
 
 /**
+ * Game controller for the tic-tac-toe.
+ *
  * Created by dspirov on 30/07/16.
  */
 public class Game {
@@ -16,6 +18,11 @@ public class Game {
         this.board = board;
     }
 
+    /**
+     * Initializes the game.
+     * - X is always first
+     * - sets the game status to PLAYING
+     */
     public void initGame() {
         this.board.init();
         this.currentPlayer = Seed.X;
@@ -52,15 +59,16 @@ public class Game {
         }
     }
 
+
     private boolean isDraw() {
         for (int row = 0; row < ROWS_COUNT; ++row) {
             for (int col = 0; col < COLUMNS_COUNT; ++col) {
                 if (board.getCell(row, col).getSeed() == Seed.EMPTY) {
-                    return false; // an empty cell found, not draw, exit
+                    return false;
                 }
             }
         }
-        return true;  // no more empty cell, it's a draw
+        return true;
     }
 
     private boolean hasWon(Seed theSeed, int rowSelected, int colSelected) {
