@@ -10,4 +10,6 @@ Implement a game of tic-tac-toe.
 
 Repository contains implementation of the game. Also contains a small UI application - swing based which is used as user interface to the game.
 
-Its a standard maven project.
+Its a standard maven project. All the tests are running on the maven install build - **mvn clean install**.
+
+The executable swing implementation can be started by the class ** com.github.dspirov.ui.TicTacToeFrame**

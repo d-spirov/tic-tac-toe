@@ -1,6 +1,5 @@
 package com.github.dspirov.ui;
 
-import com.github.dspirov.model.Board;
 import com.github.dspirov.model.Game;
 
 import javax.swing.*;
