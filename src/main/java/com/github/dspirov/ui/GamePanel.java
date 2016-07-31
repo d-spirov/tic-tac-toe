@@ -32,9 +32,9 @@ class GamePanel extends JPanel {
     private static final int GRID_WIDTH = 8;
     private static final int SYMBOL_STRIKE_WIDTH = 8;
     private Game game;
-    private JLabel statusBar;
+    private StatusBar statusBar;
 
-    public GamePanel(Game game, JLabel statusBar) {
+    public GamePanel(Game game, StatusBar statusBar) {
         this.game = game;
         this.statusBar = statusBar;
         setPreferredSize(new Dimension(CELL_SIZE * COLUMNS_COUNT, CELL_SIZE * ROWS_COUNT));
@@ -62,8 +62,6 @@ class GamePanel extends JPanel {
                 int y = e.getY();
                 int rowSelected = y / CELL_SIZE;
                 int colSelected = x / CELL_SIZE;
-                System.out.println("Clicked on the " + rowSelected + " " + colSelected);
-
                 if (game.getCurrentState() == PLAYING) {
                     if (rowSelected >= 0 && rowSelected < ROWS_COUNT && colSelected >= 0
                             && colSelected < COLUMNS_COUNT && game.getBoard().getCell(rowSelected, colSelected).getSeed() == Seed.EMPTY) {
@@ -74,7 +72,7 @@ class GamePanel extends JPanel {
                             + game.getCurrentState());
                 }
                 repaint();
-                updateStatusBar();
+                statusBar.update();
             }
         });
     }
@@ -112,28 +110,6 @@ class GamePanel extends JPanel {
             g.fillRoundRect(CELL_SIZE * j - GRID_WIDTH / 2, 0, GRID_WIDTH, CANVAS_HEIGHT,
                     GRID_WIDTH, GRID_WIDTH);
         }
-    }
-
-    private void updateStatusBar() {
-        State currentState = game.getCurrentState();
-        if (currentState == PLAYING) {
-            statusBar.setForeground(Color.BLACK);
-            if (game.getCurrentPlayer() == Seed.X) {
-                statusBar.setText(game.getPlayerName(Seed.X) + "'s Turn");
-            } else {
-                statusBar.setText(game.getPlayerName(Seed.O) + "'s Turn");
-            }
-        } else if (currentState == DRAW) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText("It's a Draw! Click to play again.");
-        } else if (currentState == X_WON) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText(game.getPlayerName(Seed.X) + " Won! Click to play again.");
-        } else if (currentState == O_WON) {
-            statusBar.setForeground(Color.RED);
-            statusBar.setText(game.getPlayerName(Seed.O) + " Won! Click to play again.");
-        }
-
     }
 
 }

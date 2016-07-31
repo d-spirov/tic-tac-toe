@@ -1,5 +1,8 @@
 package com.github.dspirov.model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +15,8 @@ import static com.github.dspirov.model.Board.ROWS_COUNT;
  * Created by dspirov on 30/07/16.
  */
 public class Game {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Game.class);
 
     private Seed currentPlayer;
     private Board board;
@@ -41,6 +46,7 @@ public class Game {
         this.currentPlayer = Seed.X;
         this.currentState = State.PLAYING;
         this.moves = 0;
+        LOG.info("New game initialized with players [" + players.get(Seed.X) + ", " + players.get(Seed.O) + "]");
     }
 
     public State getCurrentState() {
@@ -76,8 +82,10 @@ public class Game {
     private void updateGameState(Seed seed, int row, int col) {
         if (hasWon(seed, row, col)) {
             currentState = (seed == Seed.X) ? State.X_WON : State.O_WON;
+            LOG.info("Game ends as win by " + currentState);
         } else if (isDraw()) {
             currentState = State.DRAW;
+            LOG.info("Game ends as DRAW");
         }
     }
 
